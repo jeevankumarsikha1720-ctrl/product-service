@@ -1,0 +1,53 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1A1A1A1A-0000-0000-0000-000000000001}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2A2A2A2A-0000-0000-0000-000000000002}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Api", "src\ProductService.Api\ProductService.Api.csproj", "{AAAAAAAA-1111-1111-1111-111111111111}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Application", "src\ProductService.Application\ProductService.Application.csproj", "{BBBBBBBB-2222-2222-2222-222222222222}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Domain", "src\ProductService.Domain\ProductService.Domain.csproj", "{CCCCCCCC-3333-3333-3333-333333333333}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Infrastructure", "src\ProductService.Infrastructure\ProductService.Infrastructure.csproj", "{DDDDDDDD-4444-4444-4444-444444444444}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductService.Tests", "tests\ProductService.Tests\ProductService.Tests.csproj", "{EEEEEEEE-5555-5555-5555-555555555555}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAAAAAAA-1111-1111-1111-111111111111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAAAAAAA-1111-1111-1111-111111111111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAAAAAAA-1111-1111-1111-111111111111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAAAAAAA-1111-1111-1111-111111111111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBBBBBBB-2222-2222-2222-222222222222}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBBBBBBB-2222-2222-2222-222222222222}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBBBBBBB-2222-2222-2222-222222222222}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBBBBBBB-2222-2222-2222-222222222222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCCCCCC-3333-3333-3333-333333333333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCCCCCC-3333-3333-3333-333333333333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCCCCCC-3333-3333-3333-333333333333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCCCCCC-3333-3333-3333-333333333333}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDDDDDDD-4444-4444-4444-444444444444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDDDDDDD-4444-4444-4444-444444444444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDDDDDDD-4444-4444-4444-444444444444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDDDDDDD-4444-4444-4444-444444444444}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEEEEEEE-5555-5555-5555-555555555555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEEEEEEE-5555-5555-5555-555555555555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEEEEEEE-5555-5555-5555-555555555555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEEEEEEE-5555-5555-5555-555555555555}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AAAAAAAA-1111-1111-1111-111111111111} = {1A1A1A1A-0000-0000-0000-000000000001}
+		{BBBBBBBB-2222-2222-2222-222222222222} = {1A1A1A1A-0000-0000-0000-000000000001}
+		{CCCCCCCC-3333-3333-3333-333333333333} = {1A1A1A1A-0000-0000-0000-000000000001}
+		{DDDDDDDD-4444-4444-4444-444444444444} = {1A1A1A1A-0000-0000-0000-000000000001}
+		{EEEEEEEE-5555-5555-5555-555555555555} = {2A2A2A2A-0000-0000-0000-000000000002}
+	EndGlobalSection
+EndGlobal

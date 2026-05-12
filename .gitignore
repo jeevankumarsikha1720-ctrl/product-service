@@ -1,0 +1,39 @@
+# Build outputs
+bin/
+obj/
+out/
+publish/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Test results
+TestResults/
+*.coverage
+*.coveragexml
+
+# Rider / ReSharper
+_ReSharper*/
+*.DotSettings.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+**/secrets.json
+*.pfx
+
+# EF Core
+**/Migrations/Snapshot/
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+*.log
