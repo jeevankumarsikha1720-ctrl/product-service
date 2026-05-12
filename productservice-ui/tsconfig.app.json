@@ -1,0 +1,3 @@
+// This file is intentionally empty.
+// The active TypeScript config is tsconfig.json + tsconfig.node.json.
+// Safe to delete this file in your editor or via `del tsconfig.app.json`.
