@@ -19,6 +19,8 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // Idempotency cache for the /commit endpoint. Singleton MemoryCache.
 builder.Services.AddMemoryCache();
@@ -40,6 +42,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // Auto-migrate + backfill in Development. In production, run migrations from CI/CD.
 if (app.Environment.IsDevelopment())
