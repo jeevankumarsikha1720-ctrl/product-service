@@ -34,11 +34,10 @@ const string FrontendCors = "frontend";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCors, policy => policy
-        .WithOrigins(
-            "http://localhost:5173",   // Vite dev default
-            "http://localhost:4173")   // Vite preview
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    .SetIsOriginAllowed(_ => true)
+    .AllowAnyHeader()
+    .AllowAnyMethod());
+
 });
 
 var app = builder.Build();
