@@ -1,5 +1,6 @@
 using System.Text.Json;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Api.Idempotency;
 using ProductService.Application.Inventory.Commands.CommitStock;
@@ -39,6 +40,7 @@ public sealed class InventoryController(IMediator mediator, IIdempotencyStore id
         return Ok(result);
     }
     [HttpPost("products/{productId:guid}/receive")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Receive(
     Guid productId,
     [FromBody] ReceiveStockRequest request,

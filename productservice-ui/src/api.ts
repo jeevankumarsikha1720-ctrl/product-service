@@ -6,6 +6,7 @@ import type {
   Product,
   UpdateProductInput,
 } from "./types";
+import { getStoredToken } from "./auth/AuthContext";
 
 // API base URL. Reads from VITE_API_BASE_URL at build time so we can ship
 // different builds for dev vs. production without code changes. Falls back
@@ -18,8 +19,19 @@ async function request<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
+  // Attach the JWT if the user is logged in. Public endpoints ignore it;
+  // admin endpoints require it to be valid.
+  const token = getStoredToken();
+  const authHeader: Record<string, string> = token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
+
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeader,
+      ...(init?.headers ?? {}),
+    },
     ...init,
   });
 

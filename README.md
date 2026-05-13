@@ -4,6 +4,23 @@ Modern e-commerce backend and storefront built with ASP.NET Core, Clean Architec
 
 ---
 
+## Live Demo
+
+| Surface | URL |
+|---------|-----|
+| Storefront + Admin UI | https://salmon-grass-0d1e97810.7.azurestaticapps.net |
+| API root | https://productservice-api-jk2026.azurewebsites.net/api/products |
+| Readiness probe | https://productservice-api-jk2026.azurewebsites.net/health/ready |
+
+Hosted on Azure:
+
+- **Backend** — ASP.NET Core 10 on Azure App Service (Linux)
+- **Database** — Azure SQL Database (Serverless, auto-pause)
+- **Frontend** — React 19 + Vite on Azure Static Web Apps
+- **CI/CD** — GitHub Actions auto-deploys the API on every push to `main`
+
+---
+
 # Overview
 
 ProductService is a full-stack e-commerce inventory platform designed with enterprise backend architecture principles.

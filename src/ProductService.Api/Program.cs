@@ -1,4 +1,9 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using ProductService.Api.Auth;
 using ProductService.Api.HealthChecks;
 using ProductService.Api.Idempotency;
 using ProductService.Api.Middleware;
@@ -18,9 +23,68 @@ builder.Host.UseSerilog((ctx, _, cfg) => cfg
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// ── JWT auth ───────────────────────────────────────────────────────────────
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
+var jwtOpts = builder.Configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>() ?? new JwtOptions();
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtOpts.Issuer,
+            ValidAudience = jwtOpts.Audience,
+            IssuerSigningKey = string.IsNullOrWhiteSpace(jwtOpts.Secret)
+                ? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(new string('x', 32))) // placeholder so DI doesn't crash at startup; will reject any token if real secret is missing
+                : new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOpts.Secret)),
+            ClockSkew = TimeSpan.FromMinutes(1),
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "ProductService API",
+        Version = "v1"
+    });
+
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Paste token here. Do NOT type Bearer manually."
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // Idempotency cache for the /commit endpoint. Singleton MemoryCache.
 builder.Services.AddMemoryCache();
@@ -29,15 +93,17 @@ builder.Services.AddSingleton<IIdempotencyStore, InMemoryIdempotencyStore>();
 builder.Services.AddHealthChecks()
     .AddCheck<DatabaseHealthCheck>("products-db", tags: new[] { "ready" });
 
-// CORS for the Vite dev server (frontend).
+// CORS: permissive in dev and for the public storefront/admin UI.
+// In a real production system you'd restrict this to specific frontend
+// origins. Wide-open is fine here because the destructive endpoints are
+// JWT-guarded via [Authorize(Roles = "Admin")].
 const string FrontendCors = "frontend";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCors, policy => policy
-    .SetIsOriginAllowed(_ => true)
-    .AllowAnyHeader()
-    .AllowAnyMethod());
-
+        .SetIsOriginAllowed(_ => true)
+        .AllowAnyHeader()
+        .AllowAnyMethod());
 });
 
 var app = builder.Build();
@@ -59,6 +125,11 @@ app.UseSerilogRequestLogging();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseCors(FrontendCors);
+
+// AuthN must come BEFORE AuthZ which must come BEFORE MapControllers.
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.MapHealthChecks("/health/live");

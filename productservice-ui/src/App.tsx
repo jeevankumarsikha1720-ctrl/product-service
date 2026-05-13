@@ -4,6 +4,8 @@ import { StorePage } from "./store/StorePage";
 import { AdminProductsPage } from "./admin/AdminProductsPage";
 import { NavBar } from "./shared/NavBar";
 import { CartDrawer } from "./cart/CartDrawer";
+import { LoginPage } from "./auth/LoginPage";
+import { RequireAdmin } from "./auth/RequireAdmin";
 
 export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
@@ -15,7 +17,19 @@ export default function App() {
       <main className="flex-1">
         <Routes>
           <Route path="/" element={<StorePage />} />
-          <Route path="/admin" element={<AdminProductsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* Admin is gated behind RequireAdmin - unauthenticated users get
+              bounced to /login and bounced back after a successful login. */}
+          <Route
+            path="/admin"
+            element={
+              <RequireAdmin>
+                <AdminProductsPage />
+              </RequireAdmin>
+            }
+          />
+
           <Route
             path="*"
             element={

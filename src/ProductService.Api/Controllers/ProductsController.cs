@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductService.Application.Common.Models;
 using ProductService.Application.Products.Commands.CreateProduct;
@@ -31,8 +32,10 @@ public sealed class ProductsController(ISender sender) : ControllerBase
         => Ok(await sender.Send(new GetProductQuery(id), ct));
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<ProductDto>> Create(
         [FromBody] CreateProductCommand command,
         CancellationToken ct)
@@ -42,8 +45,10 @@ public sealed class ProductsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ProductDto>> Update(
         Guid id,
@@ -55,7 +60,9 @@ public sealed class ProductsController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Admin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
     {
